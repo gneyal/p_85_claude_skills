@@ -11,7 +11,7 @@ Scan and clean up disk space on macOS. Finds caches, unused app data, build arti
 **Install:**
 
 ```bash
-mkdir -p ~/.claude/skills/disk-cleanup && curl -sL https://raw.githubusercontent.com/gneyal/claude-skills/main/disk-cleanup/SKILL.md -o ~/.claude/skills/disk-cleanup/SKILL.md
+mkdir -p ~/.claude/skills/disk-cleanup && curl -sL https://raw.githubusercontent.com/gneyal/p_85_claude_skills/main/disk-cleanup/SKILL.md -o ~/.claude/skills/disk-cleanup/SKILL.md
 ```
 
 Restart Claude Code. Type `/disk-cleanup` and go.

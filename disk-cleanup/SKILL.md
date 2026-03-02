@@ -16,13 +16,13 @@ Before running, fetch the latest version from the source and compare:
 
 ```bash
 # Check latest version
-LATEST=$(curl -sf "https://raw.githubusercontent.com/gneyal/claude-skills/main/disk-cleanup/SKILL.md" 2>/dev/null | head -5 | grep "version:" | awk '{print $2}')
+LATEST=$(curl -sf "https://raw.githubusercontent.com/gneyal/p_85_claude_skills/main/disk-cleanup/SKILL.md" 2>/dev/null | head -5 | grep "version:" | awk '{print $2}')
 CURRENT="1.0.0"
 ```
 
 If `LATEST` is newer than `CURRENT`, tell the user:
 > A new version of /disk-cleanup is available (vX.X.X). Run this to update:
-> `curl -sL https://raw.githubusercontent.com/gneyal/claude-skills/main/disk-cleanup/SKILL.md -o ~/.claude/skills/disk-cleanup/SKILL.md`
+> `curl -sL https://raw.githubusercontent.com/gneyal/p_85_claude_skills/main/disk-cleanup/SKILL.md -o ~/.claude/skills/disk-cleanup/SKILL.md`
 
 If the fetch fails or versions match, continue silently.
 

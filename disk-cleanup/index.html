@@ -98,7 +98,7 @@
         <div class="text-sm text-neutral-500 font-mono mb-3">or paste this in your terminal:</div>
         <div class="flex items-center justify-between gap-4">
           <div class="font-mono text-base text-neutral-300 overflow-x-auto whitespace-nowrap">
-            <span class="text-neutral-500 select-none">~&nbsp;</span><span class="text-green-400">mkdir -p</span> ~/.claude/skills/disk-cleanup <span class="text-neutral-600">&&</span> <span class="text-green-400">curl -sL</span> <span class="text-neutral-400">https://raw.githubusercontent.com/gneyal/claude-skills/main/disk-cleanup/SKILL.md</span> <span class="text-neutral-600">-o</span> ~/.claude/skills/disk-cleanup/SKILL.md
+            <span class="text-neutral-500 select-none">~&nbsp;</span><span class="text-green-400">mkdir -p</span> ~/.claude/skills/disk-cleanup <span class="text-neutral-600">&&</span> <span class="text-green-400">curl -sL</span> <span class="text-neutral-400">https://raw.githubusercontent.com/gneyal/p_85_claude_skills/main/disk-cleanup/SKILL.md</span> <span class="text-neutral-600">-o</span> ~/.claude/skills/disk-cleanup/SKILL.md
           </div>
           <button
             onclick="copyInstall(this)"
@@ -231,7 +231,7 @@
     }
 
     function copyInstall(btn) {
-      const cmd = 'mkdir -p ~/.claude/skills/disk-cleanup && curl -sL https://raw.githubusercontent.com/gneyal/claude-skills/main/disk-cleanup/SKILL.md -o ~/.claude/skills/disk-cleanup/SKILL.md';
+      const cmd = 'mkdir -p ~/.claude/skills/disk-cleanup && curl -sL https://raw.githubusercontent.com/gneyal/p_85_claude_skills/main/disk-cleanup/SKILL.md -o ~/.claude/skills/disk-cleanup/SKILL.md';
       navigator.clipboard.writeText(cmd).then(() => {
         const label = btn.querySelector('.install-copy-text');
         label.textContent = 'copied';

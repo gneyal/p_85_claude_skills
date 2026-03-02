@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>/disk-cleanup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['JetBrains Mono', 'monospace'],
+            sans: ['Instrument Sans', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #050505; }
+    .bar-fill { animation: fillBar 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes fillBar { from { width: 0; } }
+    .typewriter { overflow: hidden; white-space: nowrap; border-right: 2px solid #4ade80; animation: typing 0.8s steps(16) forwards, blink 0.6s step-end infinite; width: 0; }
+    @keyframes typing { from { width: 0; } to { width: 14ch; } }
+    @keyframes blink { 50% { border-color: transparent; } }
+    .grain { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0.02; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
+    .glow-green { text-shadow: 0 0 30px rgba(74, 222, 128, 0.4); }
+    .scan-row { opacity: 0; animation: scanIn 0.3s ease-out forwards; }
+    .scan-row:nth-child(1) { animation-delay: 0.6s; }
+    .scan-row:nth-child(2) { animation-delay: 0.8s; }
+    .scan-row:nth-child(3) { animation-delay: 1.0s; }
+    .scan-row:nth-child(4) { animation-delay: 1.2s; }
+    @keyframes scanIn { from { opacity: 0; transform: translateX(-4px); } to { opacity: 1; transform: translateX(0); } }
+    .copy-btn { transition: all 0.15s; }
+    .copy-btn:active { transform: scale(0.95); }
+  </style>
+</head>
+<body class="text-neutral-300 min-h-screen font-sans antialiased">
+  <div class="grain"></div>
+
+  <div class="max-w-2xl mx-auto px-8 pt-24 pb-20 relative">
+
+    <!-- Title -->
+    <div class="mb-20">
+      <div class="font-mono text-sm text-neutral-500 mb-4 tracking-wider">CLAUDE CODE SKILL</div>
+      <h1 class="text-6xl font-bold text-white leading-none tracking-tight mb-6">/disk-cleanup</h1>
+      <p class="text-neutral-400 text-xl leading-relaxed max-w-lg">
+        Find what's eating your disk. Delete it. See the difference. Five minutes, no guesswork.
+      </p>
+    </div>
+
+    <!-- Command -->
+    <div class="mb-24">
+      <div class="bg-neutral-950 border border-neutral-800 p-6 relative group">
+        <div class="flex items-center justify-between">
+          <div class="font-mono text-xl">
+            <span class="text-neutral-500 select-none">~&nbsp;</span><span class="text-green-400 typewriter">/disk-cleanup</span>
+          </div>
+          <button
+            onclick="copyCmd(this)"
+            class="copy-btn font-mono text-sm text-neutral-400 hover:text-green-400 border border-neutral-700 hover:border-green-500/30 px-5 py-2.5 tracking-wide uppercase"
+          >
+            <span class="copy-text">copy</span>
+          </button>
+        </div>
+      </div>
+      <div class="text-sm text-neutral-600 mt-4 font-mono">
+        also triggers on: "free up space" / "clean my disk" / "low on storage"
+      </div>
+    </div>
+
+    <!-- Install -->
+    <div class="mb-24">
+      <div class="font-mono text-base text-neutral-300 uppercase tracking-[0.2em] mb-6">Install</div>
+      <p class="text-xl text-neutral-400 mb-8">Two ways to get it:</p>
+
+      <!-- Option 1: Download button -->
+      <div class="bg-neutral-950 border border-neutral-800 p-8 mb-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-lg text-neutral-200 font-medium mb-1">Download SKILL.md</div>
+            <div class="text-base text-neutral-500 font-mono">save to ~/.claude/skills/disk-cleanup/</div>
+          </div>
+          <button
+            onclick="downloadSkill()"
+            class="copy-btn font-mono text-base text-neutral-200 bg-green-500/10 hover:bg-green-500/20 border border-green-500/30 hover:border-green-400/50 px-8 py-3.5 tracking-wide uppercase transition-all"
+          >
+            download
+          </button>
+        </div>
+      </div>
+
+      <!-- Option 2: One-liner -->
+      <div class="bg-neutral-950 border border-neutral-800 p-6">
+        <div class="text-sm text-neutral-500 font-mono mb-3">or paste this in your terminal:</div>
+        <div class="flex items-center justify-between gap-4">
+          <div class="font-mono text-base text-neutral-300 overflow-x-auto whitespace-nowrap">
+            <span class="text-neutral-500 select-none">~&nbsp;</span><span class="text-green-400">mkdir -p</span> ~/.claude/skills/disk-cleanup <span class="text-neutral-600">&&</span> <span class="text-green-400">curl -sL</span> <span class="text-neutral-400">https://raw.githubusercontent.com/gneyal/claude-skills/main/disk-cleanup/SKILL.md</span> <span class="text-neutral-600">-o</span> ~/.claude/skills/disk-cleanup/SKILL.md
+          </div>
+          <button
+            onclick="copyInstall(this)"
+            class="copy-btn flex-shrink-0 font-mono text-sm text-neutral-400 hover:text-green-400 border border-neutral-700 hover:border-green-500/30 px-4 py-2 tracking-wide uppercase"
+          >
+            <span class="install-copy-text">copy</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="text-base text-neutral-500 mt-6 font-mono">
+        Restart Claude Code. Type <span class="text-neutral-200">/disk-cleanup</span> and go.
+      </p>
+    </div>
+
+    <!-- Scan results -->
+    <div class="mb-24">
+      <div class="font-mono text-base text-neutral-300 uppercase tracking-[0.2em] mb-3">Scan results</div>
+      <div class="text-base font-mono text-neutral-600 mb-6">from an actual run on this machine &darr;</div>
+
+      <div class="bg-neutral-950 border border-neutral-800 overflow-hidden">
+        <div class="grid grid-cols-[1fr_90px_70px] px-6 py-4 border-b border-neutral-800 text-sm font-mono text-neutral-500 uppercase tracking-widest">
+          <span>path</span>
+          <span class="text-right">size</span>
+          <span class="text-right">status</span>
+        </div>
+        <div class="scan-row grid grid-cols-[1fr_90px_70px] px-6 py-4 border-b border-neutral-900 items-center">
+          <span class="font-mono text-base text-neutral-100">Autodesk/webdeploy</span>
+          <span class="font-mono text-base text-right text-red-400 font-medium">9.7 GB</span>
+          <span class="text-right"><span class="inline-block w-3 h-3 rounded-full bg-green-500"></span></span>
+        </div>
+        <div class="scan-row grid grid-cols-[1fr_90px_70px] px-6 py-4 border-b border-neutral-900 items-center">
+          <span class="font-mono text-base text-neutral-100">Cursor/</span>
+          <span class="font-mono text-base text-right text-orange-400 font-medium">4.6 GB</span>
+          <span class="text-right"><span class="inline-block w-3 h-3 rounded-full bg-yellow-500"></span></span>
+        </div>
+        <div class="scan-row grid grid-cols-[1fr_90px_70px] px-6 py-4 border-b border-neutral-900 items-center">
+          <span class="font-mono text-base text-neutral-200">Caches/Google</span>
+          <span class="font-mono text-base text-right text-neutral-200 font-medium">1.7 GB</span>
+          <span class="text-right"><span class="inline-block w-3 h-3 rounded-full bg-green-500"></span></span>
+        </div>
+        <div class="scan-row grid grid-cols-[1fr_90px_70px] px-6 py-4 items-center">
+          <span class="font-mono text-base text-neutral-300">Caches/Homebrew</span>
+          <span class="font-mono text-base text-right text-neutral-300 font-medium">498 MB</span>
+          <span class="text-right"><span class="inline-block w-3 h-3 rounded-full bg-green-500"></span></span>
+        </div>
+      </div>
+
+      <div class="flex gap-8 mt-5 text-sm font-mono text-neutral-400">
+        <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-green-500 inline-block"></span> safe to delete</span>
+        <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-yellow-500 inline-block"></span> asks first</span>
+        <span class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-red-500 inline-block"></span> manual</span>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="mb-24">
+      <div class="font-mono text-base text-neutral-300 uppercase tracking-[0.2em] mb-8">Result</div>
+
+      <div class="flex items-end gap-12">
+        <div class="flex-1">
+          <div class="flex justify-between mb-3">
+            <span class="text-base font-mono text-neutral-400">before</span>
+            <span class="text-base font-mono text-red-400">14 GB free</span>
+          </div>
+          <div class="h-5 bg-neutral-900 w-full">
+            <div class="h-full bg-red-500/60 bar-fill" style="width: 93%"></div>
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="flex justify-between mb-3">
+            <span class="text-base font-mono text-neutral-400">after</span>
+            <span class="text-base font-mono text-green-400">33 GB free</span>
+          </div>
+          <div class="h-5 bg-neutral-900 w-full">
+            <div class="h-full bg-green-500/60 bar-fill" style="width: 78%; animation-delay: 0.4s"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-10">
+        <span class="font-mono text-green-400 text-5xl font-bold glow-green">+19 GB</span>
+        <span class="font-mono text-neutral-400 text-xl ml-3">recovered</span>
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="mb-24">
+      <div class="font-mono text-base text-neutral-300 uppercase tracking-[0.2em] mb-8">Process</div>
+
+      <div class="font-mono text-lg leading-[2.4] text-neutral-300 border-l-2 border-neutral-800 pl-6">
+        <div><span class="text-green-400">01</span>&nbsp; check available disk space</div>
+        <div><span class="text-green-400">02</span>&nbsp; scan ~/Library, ~/Code, ~/.Trash</div>
+        <div><span class="text-green-400">03</span>&nbsp; rank by size, tag by risk</div>
+        <div><span class="text-green-400">04</span>&nbsp; show breakdown, ask what to remove</div>
+        <div><span class="text-green-400">05</span>&nbsp; delete approved items, report delta</div>
+      </div>
+    </div>
+
+    <!-- Safety -->
+    <div class="mb-20">
+      <div class="font-mono text-base text-neutral-300 uppercase tracking-[0.2em] mb-8">Won't touch</div>
+      <div class="font-mono text-lg text-neutral-400 space-y-3">
+        <div><span class="text-red-400 font-bold">x</span>&nbsp; system files, com.apple.* caches</div>
+        <div><span class="text-red-400 font-bold">x</span>&nbsp; app data without your OK</div>
+        <div><span class="text-red-400 font-bold">x</span>&nbsp; anything outside ~/Library and ~/Code</div>
+        <div class="pt-4 text-neutral-500 text-base">caches regenerate. node_modules reinstall. nothing permanent.</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="border-t border-neutral-900 pt-5 flex justify-between">
+      <span class="font-mono text-sm text-neutral-600">claude code</span>
+      <span class="font-mono text-sm text-neutral-600">~/.claude/skills/disk-cleanup</span>
+    </div>
+
+  </div>
+
+  <script>
+    function copyCmd(btn) {
+      navigator.clipboard.writeText('/disk-cleanup').then(() => {
+        const label = btn.querySelector('.copy-text');
+        label.textContent = 'copied';
+        btn.classList.add('!text-green-400', '!border-green-500/30');
+        setTimeout(() => {
+          label.textContent = 'copy';
+          btn.classList.remove('!text-green-400', '!border-green-500/30');
+        }, 1500);
+      });
+    }
+
+    function copyInstall(btn) {
+      const cmd = 'mkdir -p ~/.claude/skills/disk-cleanup && curl -sL https://raw.githubusercontent.com/gneyal/claude-skills/main/disk-cleanup/SKILL.md -o ~/.claude/skills/disk-cleanup/SKILL.md';
+      navigator.clipboard.writeText(cmd).then(() => {
+        const label = btn.querySelector('.install-copy-text');
+        label.textContent = 'copied';
+        btn.classList.add('!text-green-400', '!border-green-500/30');
+        setTimeout(() => {
+          label.textContent = 'copy';
+          btn.classList.remove('!text-green-400', '!border-green-500/30');
+        }, 1500);
+      });
+    }
+
+    const SKILL_CONTENT = `---
+name: disk-cleanup
+description: Scan and clean up disk space on macOS. Use when user asks to free disk space, clean caches, check storage, or mentions /disk-cleanup.
+---
+
+# Disk Cleanup \u2014 Free Up macOS Disk Space
+
+Scan the system for space hogs and interactively clean them up.
+
+## Steps
+
+### 1. Check Current Disk Space
+
+\`\`\`bash
+df -h /
+\`\`\`
+
+Report the total, used, and available space.
+
+### 2. Scan Large Directories
+
+Run these scans in parallel:
+
+\`\`\`bash
+# Top-level user folders
+du -sh ~/Code ~/Downloads ~/Movies ~/Desktop ~/Documents ~/Music ~/Pictures 2>/dev/null | sort -rh
+
+# Application Support (app data)
+for d in "$HOME/Library/Application Support"/*/; do du -sh "$d" 2>/dev/null; done | sort -rh | head -15
+
+# Caches
+for d in "$HOME/Library/Caches"/*/; do du -sh "$d" 2>/dev/null; done | sort -rh | head -15
+
+# Trash
+du -sh ~/.Trash 2>/dev/null
+
+# Docker (if present)
+du -sh ~/Library/Containers/com.docker.docker 2>/dev/null
+
+# Xcode DerivedData (if present)
+du -sh ~/Library/Developer/Xcode/DerivedData 2>/dev/null
+
+# iOS device backups (if present)
+du -sh "$HOME/Library/Application Support/MobileSync/Backup" 2>/dev/null
+
+# Homebrew cache
+du -sh ~/Library/Caches/Homebrew 2>/dev/null
+
+# npm/bun/pnpm cache
+du -sh ~/.npm ~/.bun ~/.pnpm-store 2>/dev/null
+
+# node_modules across projects (top 10 largest)
+find ~/Code -maxdepth 3 -name "node_modules" -type d -exec du -sh {} + 2>/dev/null | sort -rh | head -10
+
+# Log files
+du -sh ~/Library/Logs 2>/dev/null
+\`\`\`
+
+### 3. Present Findings
+
+Show a summary table with:
+- Directory name
+- Size
+- What it is (brief description)
+- Whether it's safe to delete
+
+Categories to highlight:
+- **Caches** \u2014 always safe to delete, apps re-download as needed
+- **App updater caches** \u2014 old update downloads, safe to delete
+- **Unused app data** \u2014 Application Support for apps no longer used
+- **Build artifacts** \u2014 node_modules, DerivedData, etc.
+- **Trash** \u2014 remind user to empty if large
+
+### 4. Ask What to Clean
+
+Present the user with cleanup options grouped by risk:
+
+**Safe to delete (caches, build artifacts):**
+- All caches in ~/Library/Caches
+- Homebrew downloaded packages
+- npm/bun/pnpm cache
+- Playwright browser binaries
+- Electron/app updater caches
+
+**Review first (app data, may lose settings):**
+- Application Support for specific unused apps
+- Old node_modules in projects
+
+**User action required:**
+- Trash (suggest emptying)
+- Docker data (suggest \\\`docker system prune\\\`)
+
+### 5. Execute Cleanup
+
+Delete only what the user approves. Use \\\`rm -rf\\\` for directories.
+
+After cleanup, run \\\`df -h /\\\` again and report the before/after comparison.
+
+## Tips
+
+- Never delete ~/Library/Application Support/Claude without asking
+- Never delete ~/Library/Caches/com.apple.* system caches
+- Chrome cache regenerates quickly, safe to clear
+- Homebrew cache can be cleared with \\\`brew cleanup --prune=all\\\` as an alternative
+- node_modules can always be recreated with \\\`npm install\\\` / \\\`bun install\\\`
+`;
+
+    function downloadSkill() {
+      const blob = new Blob([SKILL_CONTENT], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'SKILL.md';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
